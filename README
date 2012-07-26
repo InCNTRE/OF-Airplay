@@ -1,5 +1,8 @@
+OF-Airplay
+==========
 
-OF-Airplay is a Bonjour tunnel application built with the POX contoller
+A project to allow secure AirPlay connectivity between devices using OpenFlow.
+OF-Airplay is a built with the POX contoller
 
 POX is a network controller written in Python.
 
@@ -15,19 +18,19 @@ pox.py boots up POX. It takes a list of module names on the command line,
 locates the modules, calls their launch() function (if it exists), and
 then opens up a Python commandline for interactive use.
 
-Modules are looked for everywhere that Python normally looks, plus the
-"pox" and "ext" directories.  Thus, you can do the following:
+To start the Airplay proxy run:
 
-  ./pox.py forwarding.bonjour
+  ./pox.py airplay.airplay
 
 You can pass options to the modules by specifying options after the module
 name.  These are passed to the module's launch() funcion.  For example,
 to set the address or port of the controller, invoke as follows:
 
-  ./pox.py openflow.of_01 --address=10.1.1.1 --port=6634
+  ./pox.py airplay.airplay --address=10.1.1.1 --port=6634
 
 pox.py also supports a few command line options of its own which should
 be given first:
  --verbose      print stack traces for initialization exceptions
  --no-cli       don't bring up a Python interpreter
  --no-openflow  don't start the openflow module automatically
+

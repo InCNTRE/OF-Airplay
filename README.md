@@ -20,13 +20,13 @@ then opens up a Python commandline for interactive use.
 
 To start the Airplay proxy run:
 
-  ./pox.py forwarding.airplay
+  ./pox.py airplay.airplay
 
 You can pass options to the modules by specifying options after the module
 name.  These are passed to the module's launch() funcion.  For example,
 to set the address or port of the controller, invoke as follows:
 
-  ./pox.py forwarding.airplay --address=10.1.1.1 --port=6634
+  ./pox.py airplay.airplay --address=10.1.1.1 --port=6634
 
 pox.py also supports a few command line options of its own which should
 be given first:
