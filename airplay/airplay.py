@@ -25,9 +25,11 @@ import pox.openflow.libopenflow_01 as of
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
 from pox.lib.util import str_to_bool
+import pox.lib.recoco as recoco
 import time
 
 log = core.getLogger()
+TIMEOUT = 25
 
 # We don't want to flood immediately when a switch connects.
 FLOOD_DELAY = 5
@@ -52,6 +54,10 @@ class LearningSwitch (EventMixin):
 
   In short, our algorithm looks like this:
 
+  At connection time:
+   	C1) Send all BonJour packets to the controller (higher priority rule)
+   	C2) Fetch a list of paired devices via JSON
+
   For each new flow:
   1) Use source address and port to update address/port table
   2) Is destination address a Bridge Filtered address, or is Ethertpe LLDP?
@@ -61,7 +67,11 @@ class LearningSwitch (EventMixin):
             DONE
   3) Is destination multicast?
      Yes:
-        3a) Flood the packet
+     	3a) Is the packet a Bonjour packet
+     		 Yes: 
+     		 	3b) Send packet to 
+     		 No:
+        		3c) Flood the packet
             DONE
   4) Port for destination address in our address/port table?
      No:
@@ -140,8 +150,11 @@ class LearningSwitch (EventMixin):
         drop()
         return
 
-    if packet.dst.isMulticast():
-      flood() # 3a
+    if packet.dst.isMulticast(): #3
+      if packet.dstip == "224.0.0.9":
+      	forward_bonjour(packet) #3b      	
+      else:
+      	flood() # 3c
     else:
       if packet.dst not in self.macToPort: # 4
         log.debug("Port for %s unknown -- flooding" % (packet.dst,))
@@ -164,18 +177,53 @@ class LearningSwitch (EventMixin):
         msg.actions.append(of.ofp_action_output(port = port))
         msg.buffer_id = event.ofp.buffer_id # 6a
         self.connection.send(msg)
-
+	
+	def forward_bonjour (packet):
+		print packet
+	
 class l2_learning (EventMixin):
   """
   Waits for OpenFlow switches to connect and makes them learning switches.
   """
   def __init__ (self, transparent):
     self.listenTo(core.openflow)
+    core.addListeners(self)
     self.transparent = transparent
 
   def _handle_ConnectionUp (self, event):
     log.debug("Connection %s" % (event.connection,))
+    
     LearningSwitch(event.connection, self.transparent)
+    
+  def _handle_GoingUpEvent (self, event):
+    get_airplay_db()
+    
+  def get_airplay_db ():
+    t = recoco.BlockingTask(getDataDB, (download_complete, download_error))
+    core.scheduler.schedule(t)
+    log.debug("Attempting to download policy description...")
+
+  def getDataDB():
+    """  Deprecated #### 1) Connect to google database and get data from the database
+        2) if id not in the implemented Policy list, implement the policy or else do nothing
+        3) parse through dictionary to get all the values
+        4) if the policy's profile matches that of a switch. implement the policy
+    """
+    log.debug("getDataDB()")
+    url = "http://of-lab2.grnoc.iu.edu/airplay"
+    result = urllib2.urlopen(url)
+    #print result
+    """You must read the file otherwise we get an error"""
+    c = result.read()
+    d = json.loads(c)
+    return d
+
+def download_error (exc):
+    log.error("Failed to download policy DB: " + str(exc))
+    # Try again
+    recoco.Timer(10, start_policy_update)
+
+    
 
 
 def launch (transparent=False):
