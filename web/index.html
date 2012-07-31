@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+
+  <link type="text/css" href="css/style.css" rel="stylesheet" />
+  <link type="text/css" href="css/bonjour/jquery-ui-1.8.22.custom.css" rel="stylesheet" />	
+  <script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery/jquery-ui-1.8.22.custom.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/bonjour.js"></script>
+
+
+  <title>InCNTRE Bonjour Controller</title>
+</head>
+
+
+<body>
+   <div id="topnav">
+    <div id="incntre-logo">
+        <img src="images/logo-incntre.png" border="0" alt="InCNTRE logo" title="InCNTRE" />
+	Bonjour Manager
+    </div> 
+
+    
+    <div id="links">
+        <a href="#" onclick="$('#about').dialog('open')">About</a> | 
+        <a href="#" onclick="$('#support').dialog('open')">Support</a> 
+    </div>
+  </div>
+
+
+   
+  <div id="tabs">
+	<ul>
+		<li><a href="nodes.html">Available Devices</a></li>
+		<li><a href="admin.html">Admin</a></li>
+	</ul>
+  </div>
+
+  <div id="about" title="About OF-AirPlay">
+	<p><b>OF-AirPlay</b> is an project to allow secure AirPlay connectivity between devices using <b>OpenFlow</b>.
+OF-Airplay is a built with the POX contoller
+
+  </div>
+
+  <div id="support" title="Support">
+     See <a href="https://github.com/InCNTRE/OF-Airplay>GitHub repository</a> for source code and documentation.
+  </div>
+
+</body>
+</html>
