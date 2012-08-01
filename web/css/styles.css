@@ -32,11 +32,19 @@ body {
     padding-left: 10px;
 }
 
+
+
+
 /* Main */
 #topnav {
     padding: 16px;
     height: 61px;
-    font-size: 2.0em;
+}
+
+#topnav-text {
+	 font-size: 2.5em;
+	 vertical-align: top;
+	 margin-left: 20px;
 }
 
 #topnav * {
@@ -44,10 +52,18 @@ body {
 }
 
 #incntre-logo {
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 #tabs {
     box-shadow: 1px 1px 2px 1px #ccc;
 }
 
+#links {
+	float: right;
+	}
+	
+.device_title {
+	font-weight:bold;
+	}
+	
